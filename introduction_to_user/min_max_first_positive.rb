@@ -22,6 +22,14 @@ def find_maximum(array)
   max_value
 end
 
+# Метод для нахождения номера первого положительного элемента с использованием for
+def index_of_first_positive(array)
+  for i in 0...array.size  # Итерируемся по элементам массива
+    return i if array[i] > 0  # Если нашли положительный элемент, возвращаем его индекс
+  end
+  -1  # Если положительного элемента нет, возвращаем -1
+end
+
 array = [-3, 4, -2, 0, 1, -5, 7, -9]
 
 # Нахождение минимального элемента
@@ -32,3 +40,6 @@ puts "Минимальный элемент: #{min_value}"
 max_value = find_maximum(array)
 puts "Максимальный элемент: #{max_value}"
 
+# Нахождение номера первого положительного элемента
+first_positive_index = index_of_first_positive(array)
+puts "Индекс первого положительного элемента: #{first_positive_index}"

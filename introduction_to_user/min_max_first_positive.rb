@@ -10,7 +10,7 @@ def find_minimum(array)
   min_value
 end
 
-# Метод для нахождения максимального элемента массива с использованием for
+# Метод для нахождения максимального элемента массивf
 def find_maximum(array)
   return nil if array.empty?  # Проверяем, что массив не пустой
   max_value = array[0]  # Инициализируем максимальное значение первым элементом
@@ -22,7 +22,7 @@ def find_maximum(array)
   max_value
 end
 
-# Метод для нахождения номера первого положительного элемента с использованием for
+# Метод для нахождения номера первого положительного элемента
 def index_of_first_positive(array)
   for i in 0...array.size  # Итерируемся по элементам массива
     return i if array[i] > 0  # Если нашли положительный элемент, возвращаем его индекс
@@ -30,16 +30,46 @@ def index_of_first_positive(array)
   -1  # Если положительного элемента нет, возвращаем -1
 end
 
-array = [-3, 4, -2, 0, 1, -5, 7, -9]
+if ARGV.size != 2
+  puts "Неверное количество аргументов. Пример использования: ruby program.rb <method> <file>"
+  exit
+end
 
-# Нахождение минимального элемента
-min_value = find_minimum(array)
-puts "Минимальный элемент: #{min_value}"
+method = ARGV[0] # первый аргумент - метод
+file_path = ARGV[1] # второй аргумент - путь к файлу
 
-# Нахождение максимального элемента
-max_value = find_maximum(array)
-puts "Максимальный элемент: #{max_value}"
+# Чтение данных из файла
+if File.exist?(file_path)
+  content = File.read(file_path) # читаем содержимое файла как строку
+  array = content.split.map(&:to_i) # разделяем строку на части и преобразуем в числа
+else
+  puts "Файл не найден: #{file_path}" # сообщение, если файл не найден
+  exit                             
+end
 
-# Нахождение номера первого положительного элемента
-first_positive_index = index_of_first_positive(array)
-puts "Индекс первого положительного элемента: #{first_positive_index}"
+# В зависимости от выбранного метода, вызываем соответствующую функцию
+case method
+when "min"
+  result = find_minimum(array)
+  if result.nil?
+    puts "Массив пустой!"
+  else
+    puts "Минимальный элемент: #{result}"
+  end
+when "max"
+result=find_maximum(array)
+ if result.nil?
+    puts "Массив пустой!"
+  else
+    puts "Максимальный элемент: #{result}"
+  end
+when "first_positive"
+  result = index_of_first_positive(array)
+  if result.nil?
+    puts "Положительные элементы отсутствуют!"
+  else
+    puts "Номер первого положительного элемента: #{result}"
+  end
+else
+  puts "Неверное название метода. Доступные методы: min, max, first_positive"
+end

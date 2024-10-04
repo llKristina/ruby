@@ -12,4 +12,5 @@ puts student1.to_s
 puts "\nИнформация о студенте 2:"
 puts student2.to_s
 
-
+puts "\nДоп инфа о студенте 1:"
+puts student1.getInfo

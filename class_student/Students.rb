@@ -69,6 +69,24 @@ end
   def self.valid_github?(handle)
     !!(handle =~ /\A[A-Za-z0-9\-]{1,39}\z/)
   end
+  
+# Метод проверки наличия контакта для связи
+ def contact_present?
+    !(@phone.nil? && @telegram.nil? && @email.nil?)
+ end
+
+ # Метод validate, который объеденяет проверки
+ def validate
+   unless contact_present?
+     raise ArgumentError, "Необходимо указать хотя бы один контакт для связи"
+ end
+
+if @github.nil? || @github.empty?
+   raise ArgumentError, "Необходимо указать GitHub"
+end
+
+end
+
 end
 
 

@@ -8,11 +8,21 @@ def initialize(id:nil, last_name:, first_name:, middle_name:, phone:nil,
 @last_name=last_name
 @first_name=first_name
 @middle_name=middle_name
-@phone=phone
+if phone.nil? || self.class.valid_phone?(phone)
+      @phone = phone
+    else
+      raise ArgumentError, "Недопустимый номер телефона: #{phone}"
+    end
 @telegram=telegram
 @email=email
 @github=github
 end
+
+ def self.valid_phone?(phone)
+   return true if phone.nil?
+    !!(phone =~ /\A\+?[0-9]{10,15}\z/)
+ end
+
 
  def to_s
     str = []

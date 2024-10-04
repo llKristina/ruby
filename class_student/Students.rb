@@ -1,6 +1,6 @@
 class Student
-attr_accessor :id, :last_name, :first_name, :middle_name, 
-:phone, :telegram, :email, :github
+attr_accessor :id, :last_name, :middle_name, :first_name
+attr_reader :phone, :telegram, :email, :github #Контакты теперь нельзя устанавливать напрямую
 
 def initialize(id:nil, last_name:, first_name:, middle_name:, phone:nil,
  telegram:nil, email:nil, github:nil)
@@ -75,7 +75,6 @@ end
     !(@phone.nil? && @telegram.nil? && @email.nil?)
  end
 
- # Метод validate, который объеденяет проверки
  def validate
    unless contact_present?
      raise ArgumentError, "Необходимо указать хотя бы один контакт для связи"
@@ -87,11 +86,35 @@ end
 
 end
 
-end
+ # Метод установки контактов
+ def set_contacts(phone: nil, telegram: nil, email: nil)
+   if phone
+     if self.class.valid_phone_number?(phone)
+      @phone = phone
+     else
+        raise ArgumentError, "Недопустимый номер телефона: #{phone}"
+     end
+ end
 
+ if telegram
+   if self.class.valid_telegram_handle?(telegram)
+      @telegram = telegram
+   else
+      raise ArgumentError, "Недопустимый телеграм: #{telegram}"
+   end
+ end
 
+ if email
+   if self.class.valid_email?(email)
+      @email = email
+   else
+      raise ArgumentError, "Недопустимый email: #{email}"
+   end
+ end
+      validate
+  end
 
- def to_s
+def to_s
     str = []
     str.push("ID: #{@id}") if @id
     str.push("Фамилия: #{@last_name}")

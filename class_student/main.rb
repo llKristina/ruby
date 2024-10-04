@@ -14,3 +14,7 @@ puts student2.to_s
 
 puts "\nДоп инфа о студенте 1:"
 puts student1.getInfo
+
+puts "\nДоп инфа о студенте 1:"
+student_short1 = StudentShort.new(student1)
+puts student_short1.to_s

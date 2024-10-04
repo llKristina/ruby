@@ -1,4 +1,4 @@
-require_relative 'student'
+require_relative 'students'
 
 student1 = Student.new(id:1, last_name:"Капустин", first_name:"Андрей", 
 middle_name:"Владимирович", phone:"89183456789",telegram:"@kapusta",

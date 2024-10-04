@@ -154,3 +154,29 @@ class Student
     "#{@first_name[0]}. #{@middle_name[0]}."
   end
 end
+
+class StudentShort
+attr_accessor :id, :full_name, :github, :contact
+ # Конструктор, принимающий объект класса Student
+ def initialize(student)
+    @id = student.id
+    @full_name = student.last_name_with_initials
+    @github = student.github
+    @contact = student.preferred_contact
+  end
+  
+ # Конструктор, принимающий ID и строку с информацией
+  def self.from_string(id, info_str)
+    full_name, github, contact = info_str.split(',').map(&:strip)
+    new_instance = allocate
+    new_instance.instance_variable_set(:@id, id)
+    new_instance.instance_variable_set(:@full_name, full_name)
+    new_instance.instance_variable_set(:@github, github)
+    new_instance.instance_variable_set(:@contact, contact)
+    new_instance
+  end
+  
+ def to_s
+    "ID: #{@id}, Name: #{@full_name}, GitHub: #{@github}, Contact: #{@contact}"
+  end
+end

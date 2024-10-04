@@ -88,7 +88,7 @@ class Student
   # Метод установки контактов
   def set_contacts(phone: nil, telegram: nil, email: nil)
     if phone
-      if self.class.valid_phone?(phone) # исправлено имя метода на valid_phone
+      if self.class.valid_phone?(phone) 
         @phone = phone
       else
         raise ArgumentError, "Недопустимый номер телефона: #{phone}"
@@ -96,7 +96,7 @@ class Student
     end
 
     if telegram
-      if self.class.valid_telegram?(telegram) # исправлено имя метода на valid_telegram
+      if self.class.valid_telegram?(telegram)
         @telegram = telegram
       else
         raise ArgumentError, "Недопустимый телеграм: #{telegram}"

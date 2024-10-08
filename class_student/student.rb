@@ -45,6 +45,8 @@ class Student
     else
       raise ArgumentError, "Недопустимый GitHub: #{github}"
     end
+    
+    validate
   end
 
   def to_s
@@ -60,6 +62,7 @@ class Student
     str.join("\n")
   end
 
+  # Валидационные методы
   def self.valid_phone_number?(phone)
     return true if phone.nil?
     !!(phone =~ /\A\+?[0-9]{10,15}\z/)
@@ -80,6 +83,21 @@ class Student
   def self.valid_github_handle?(handle)
     !!(handle =~ /\A[A-Za-z0-9\-]{1,39}\z/)
   end
-end
 
+  # Метод проверки наличия контакта для связи
+  def contact_present?
+    !(@phone.nil? && @telegram.nil? && @email.nil?)
+  end
+
+  # Метод validate, который объеденяет проверки
+  def validate
+    unless contact_present?
+      raise ArgumentError, "Необходимо указать хотя бы один контакт для связи"
+    end
+
+    if @github.nil? || @github.empty?
+      raise ArgumentError, "Необходимо указать GitHub"
+    end
+  end
+end
 

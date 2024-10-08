@@ -6,7 +6,11 @@ class Student
     @last_name = last_name
     @first_name = first_name
     @middle_name = middle_name
-    @phone = phone
+    if phone.nil? || self.class.valid_phone_number?(phone)
+      @phone = phone
+    else
+      raise ArgumentError, "Недопустимый номер телефона: #{phone}"
+    end
     @telegram = telegram
     @email = email
     @github = github
@@ -24,4 +28,10 @@ class Student
     str.push("GitHub: #{@github}") if @github
     str.join("\n")
   end
+
+  def self.valid_phone_number?(phone)
+    return true if phone.nil?
+    !!(phone =~ /\A\+?[0-9]{10,15}\z/)
+  end
 end
+

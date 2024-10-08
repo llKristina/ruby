@@ -1,7 +1,8 @@
 class Student
-  attr_accessor :id, :last_name, :first_name, :middle_name, :phone, :telegram, :email, :github
+  attr_accessor :id, :last_name, :first_name, :middle_name, :github
+  attr_reader :phone, :telegram, :email  # Контакты теперь нельзя устанавливать напрямую
 
-  def initialize(id:nil, last_name:, first_name:, middle_name:, phone:nil, telegram:nil, email:nil, github:nil)
+  def initialize(id: nil, last_name:, first_name:, middle_name:, github: nil, phone: nil, telegram: nil, email: nil)
     @id = id
     
     if self.class.valid_name?(last_name)
@@ -22,29 +23,13 @@ class Student
       raise ArgumentError, "Недопустимое отчество: #{middle_name}"
     end
     
-    if phone.nil? || self.class.valid_phone_number?(phone)
-      @phone = phone
-    else
-      raise ArgumentError, "Недопустимый номер телефона: #{phone}"
-    end
-    
-    if telegram.nil? || self.class.valid_telegram_handle?(telegram)
-      @telegram = telegram
-    else
-      raise ArgumentError, "Недопустимый телеграм: #{telegram}"
-    end
-    
-    if email.nil? || self.class.valid_email?(email)
-      @email = email
-    else
-      raise ArgumentError, "Недопустимый email: #{email}"
-    end
-    
     if github.nil? || self.class.valid_github_handle?(github)
       @github = github
     else
       raise ArgumentError, "Недопустимый GitHub: #{github}"
     end
+
+    set_contacts(phone: phone, telegram: telegram, email: email)
     
     validate
   end
@@ -64,7 +49,6 @@ class Student
 
   # Валидационные методы
   def self.valid_phone_number?(phone)
-    return true if phone.nil?
     !!(phone =~ /\A\+?[0-9]{10,15}\z/)
   end
 
@@ -99,5 +83,37 @@ class Student
       raise ArgumentError, "Необходимо указать GitHub"
     end
   end
+
+  # Метод установки контактов
+  def set_contacts(phone: nil, telegram: nil, email: nil)
+    if phone
+      if self.class.valid_phone_number?(phone)
+        @phone = phone
+      else
+        raise ArgumentError, "Недопустимый номер телефона: #{phone}"
+      end
+    end
+
+    if telegram
+      if self.class.valid_telegram_handle?(telegram)
+        @telegram = telegram
+      else
+        raise ArgumentError, "Недопустимый телеграм: #{telegram}"
+      end
+    end
+
+    if email
+      if self.class.valid_email?(email)
+        @email = email
+      else
+        raise ArgumentError, "Недопустимый email: #{email}"
+      end
+    end
+    
+    validate
+  end
 end
+
+
+
 

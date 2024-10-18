@@ -15,6 +15,26 @@ class Student
     set_contacts(params)
   end
 
+  def get_info
+    "#{last_name} #{first_name[0]}#{middle_name[0]}; GitHub: #{@github}; Контакт: #{contact_info}"
+  end
+
+  def last_name_initials
+    "#{@last_name} #{first_name[0]}#{middle_name[0]}"
+  end
+
+  def contact_info
+    if @phone
+      "Телефон: #{@phone}"
+    elsif @telegram
+      "Телега: #{@telegram}"
+    elsif @email
+      "Почта: #{@email}"
+    else
+      "Нет контактов"
+    end
+  end
+
   def to_s
     str = []
     str.push("ID: #{@id}") if @id
@@ -45,7 +65,6 @@ class Student
     raise ArgumentError, "Необходимо указать хотя бы один контакт для связи" unless contact_present?
   end
 
-  # Валидационные методы
   def valid_phone_number?(phone)
     !!(phone =~ /\A\+?[0-9]{10,15}\z/)
   end

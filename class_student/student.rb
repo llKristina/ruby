@@ -1,6 +1,5 @@
-class Student
-  attr_accessor :id, :last_name, :first_name, :middle_name, :github
-  attr_reader :phone, :telegram, :email
+class Person
+  attr_reader :id, :last_name, :first_name, :middle_name, :github, :phone, :telegram, :email
 
   def initialize(params = {})
     @id = params[:id]
@@ -13,10 +12,6 @@ class Student
     @github = params[:github]
 
     set_contacts(params)
-  end
-
-  def get_info
-    "#{last_name} #{first_name[0]}#{middle_name[0]}; GitHub: #{@github}; Контакт: #{contact_info}"
   end
 
   def last_name_initials
@@ -33,19 +28,6 @@ class Student
     else
       "Нет контактов"
     end
-  end
-
-  def to_s
-    str = []
-    str.push("ID: #{@id}") if @id
-    str.push("Фамилия: #{@last_name}")
-    str.push("Имя: #{@first_name}")
-    str.push("Отчество: #{@middle_name}")
-    str.push("Телефон: #{@phone}") if @phone
-    str.push("Телеграм: #{@telegram}") if @telegram
-    str.push("Почта: #{@email}") if @email
-    str.push("GitHub: #{@github}") if @github
-    str.join("\n")
   end
 
   private
@@ -90,35 +72,53 @@ class Student
   end
 end
 
-class Student_short
- attr_reader :id, :last_name_initials, :github, :contact
+class Student < Person
+  def initialize(params = {})
+    super(params)
+  end
 
- # Конструктор для объекта Student
- def initialize(student)
-  @id = student.id
-  @last_name_initials = student.last_name_initials
-  @github = student.github
-  @contact = student.contact_info
- end
-
- # Конструктор для id и строки info
- def initialize(id, info)
-  @id = id
-  @last_name_initials, @github, @contact = parse_info(info)
- end
-
-def to_s
-  "ID: #{@id}, Фамилия и инициалы: #{@last_name_initials}, GitHub: #{@github}, Контакт: #{@contact}"
- end
- 
- private
-
- def parse_info(info)
-  parts = info.split(';')
-  last_name_initials = parts[0].strip
-  github = parts[1].split(':')[1].strip
-  contact = parts[2].split(':')[1].strip
-  [last_name_initials, github, contact]
- end
+  def to_s
+    str = []
+    str.push("ID: #{@id}") if @id
+    str.push("Фамилия: #{@last_name}")
+    str.push("Имя: #{@first_name}")
+    str.push("Отчество: #{@middle_name}")
+    str.push("Телефон: #{@phone}") if @phone
+    str.push("Телеграм: #{@telegram}") if @telegram
+    str.push("Почта: #{@email}") if @email
+    str.push("GitHub: #{@github}") if @github
+    str.join("\n")
+  end
 end
 
+class Student_short < Person
+  attr_reader :id, :last_name_initials, :github, :contact
+
+  # Конструктор для объекта Student
+  def initialize(student)
+    @id = student.id
+    @last_name_initials = student.last_name_initials
+    @github = student.github
+    @contact = student.contact_info
+  end
+
+  # Конструктор для id и строки info
+  def initialize(id, info)
+    @id = id
+    @last_name_initials, @github, @contact = parse_info(info)
+  end
+
+  def to_s
+    "ID: #{@id}, Фамилия и инициалы: #{@last_name_initials}, GitHub: #{@github}, Контакт: #{@contact}"
+  end
+
+  private
+
+  def parse_info(info)
+    parts = info.split(';')
+    last_name_initials = parts[0].strip
+    github = parts[1].split(':')[1].strip
+    contact = parts[2].split(':')[1].strip
+    [last_name_initials, github, contact]
+  end
+end

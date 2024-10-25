@@ -17,7 +17,22 @@ def find_max(array,a,b)
 	puts " Максимальный элемент в интервале: #{max}"
 end
 
+#Дан целочисленный массив. Вывести индексы элементов, которые
+#меньше своего левого соседа, и количество таких чисел.
+def less_than_neighbor(array)
+	index=[]
+	count=0
+	(1...array.size).each do |i|
+		if array[i]<array[i-1]
+			index<<i
+			count+=1
+		end
+	end
+puts "Индексы элементов меньше левого соседа: #{index}"
+puts "Количество таких элементов: #{count}"
+end
 arr=[5,7,8,3,1,8,6,12]
 
 rearrange_array(arr)
 find_max(arr,1,4)
+less_than_neighbor(arr)

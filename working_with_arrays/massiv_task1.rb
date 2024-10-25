@@ -53,11 +53,38 @@ def find_prime_divisors(numbers)
   end
   puts "Список всех простых делителей: #{prime_divisors}"
 end
-	
 
-arr=[5,7,8,3,1,8,6,12]
+puts "Введите массив через пробел (enter для прекращения ввода)"	
+array = gets.chomp.split.map(&:to_i)
+loop do
+  puts "Введите номер функции (для выхода введите 0):"
+  puts "1: Перемещение элементов до минимального в конец массива"
+  puts "2: Поиск максимального элемента в интервале"
+  puts "3: Вывод индексов элементов меньше левого соседа"
+  puts "4: Поиск простых делителей элементов списка"
+  puts "5: Изменить массив"
 
-rearrange_array(arr)
-find_max(arr,1,4)
-less_than_neighbor(arr)
-find_prime_divisors(arr)
+  select_function = gets.chomp.to_i
+
+  break if select_function == 0
+
+  case select_function
+  when 1
+    puts "Измененный массив: #{rearrange_array(array)}"
+  when 2
+    puts "Введите начало интервала:"
+    a = gets.chomp.to_i
+    puts "Введите конец интервала:"
+    b = gets.chomp.to_i
+    puts "Максимальный элемент: #{find_max(array, a, b)}"
+  when 3
+    puts "Индексы: #{less_than_neighbor(array)}"
+  when 4
+    puts "Простые делители: #{find_prime_divisors(array)}"
+  when 5
+    puts "Введите массив через пробел (enter для прекращения ввода)"
+    array = gets.chomp.split.map(&:to_i)
+  else
+    puts "Такой функции нет"
+  end
+end

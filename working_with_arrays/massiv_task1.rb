@@ -6,6 +6,18 @@ def rearrange_array(array)
 	puts "Перемещенный массив:  #{result}"
 end
 
-arr=[5,7,8,3,1,8,10,6]
+#Дан целочисленный массив и интервал a..b. Необходимо найти
+#максимальный из элементов в этом интервале.
+def find_max(array,a,b)
+	if a < 0 || b >= array.size || a > b
+		puts "Некорректный интервал."
+    return
+  end
+	max=array[a..b].max
+	puts " Максимальный элемент в интервале: #{max}"
+end
+
+arr=[5,7,8,3,1,8,6,12]
 
 rearrange_array(arr)
+find_max(arr,1,4)

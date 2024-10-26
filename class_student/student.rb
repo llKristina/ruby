@@ -1,7 +1,11 @@
 require_relative 'person'
 class Student < Person
-  def initialize(params = {})
-    super(params)
+ def get_info
+    "#{last_name} #{first_name[0]}#{middle_name[0]}; GitHub: #{github}; Контакт: #{contact_info}"
+  end
+
+  def last_name_initials
+    "#{last_name} #{first_name[0]}#{middle_name[0]}"
   end
 
   def to_s
@@ -17,4 +21,3 @@ class Student < Person
     str.join("\n")
   end
 end
-

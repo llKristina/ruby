@@ -9,11 +9,11 @@ class Student
     @name = name
     @patronymic = patronymic
 
-    # Устанавливаем необязательные параметры, проверяя на наличие значений
-    @id = id unless id.nil?
-    @phone = phone unless phone.nil?
-    @telegram = telegram unless telegram.nil?
-    @email = email unless email.nil?
-    @git = git unless git.nil?
+    # Устанавливаем необязательные параметры 
+    @id = id
+    @phone = phone
+    @telegram = telegram
+    @email = email
+    @git = git
   end
 end

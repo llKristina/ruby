@@ -19,20 +19,20 @@ class Student
   
    # Метод для проверки, является ли строка телефонным номером
   def self.valid_phone?(phone)
-    !!(phone =~ /^\d{10}$/)
+   phone.nil? || !!(phone =~ /^\d{10}$/)
   end
   
    # Метод класса для проверки корректности Telegram 
   def self.valid_telegram?(telegram)
-    !!(telegram =~ /\A@[\w\d_]{5,}\z/)
+   telegram.nil? || !!(telegram =~ /\A@[\w\d_]{5,}\z/)
   end
   
    # Метод класса для проверки корректности email
   def self.valid_email?(email)
-    !!(email =~ /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i)
+    email.nil? || !!(email =~ /\A[\w+\-.]+@[a-z\d\-.]+\.[a-z]+\z/i)
   end
 
-  # Метод класса для проверки корректности URL для Git
+  # Метод класса для проверки корректности Git
   def self.valid_git?(git)
     !!(git =~ /\Agithub\.com\/[a-zA-Z0-9_-]+\z/)
   end
@@ -59,7 +59,18 @@ class Student
     @git = value
   end
   
-   def to_s
+   # Метод проверки наличия Git и любого контакта
+  def validate
+    unless git_present?
+      raise ArgumentError, "Git URL обязателен."
+    end
+
+    unless contact_present?
+      raise ArgumentError, "Необходимо указать хотя бы один контакт (Телефон, Telegram или Email)."
+    end
+  end
+  
+  def to_s
    "Student: #{@surname} #{@name} #{@patronymic}
     ID: #{@id} 
 	Phone: #{@phone}
@@ -67,4 +78,16 @@ class Student
 	Email: #{@email}
 	Git: #{@git}"
   end
+  private
+
+  # Проверка наличия Git
+  def git_present?
+    !@git.nil? && @git.strip != ""
+  end
+
+  # Проверка наличия любого контакта
+  def contact_present?
+    !@phone.nil? && @phone.strip != "" || !@telegram.nil? && @telegram.strip != "" || !@email.nil? && @email.strip != ""
+  end
+  
 end

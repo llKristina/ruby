@@ -10,15 +10,16 @@ begin
     email: "ivanov@example.com",
 	git:"github.com/ivanov"
   )
+  student.validate
   puts student.to_s
 
   invalid_student = Student.new(
     surname: "Петров",
     name: "Петр",
     patronymic: "Петрович",
-    phone: "123abc456",
-    email: "petrov@example.com"
+	git:"github.com/petrov"
   )
+  invalid_student.validate
 rescue ArgumentError => e
   puts e.message  
 end

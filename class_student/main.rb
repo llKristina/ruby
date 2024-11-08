@@ -1,8 +1,25 @@
 require_relative 'student'
 
-student1 = Student.new(surname: "Иванов", name: "Иван", patronymic: "Иванович")
+begin
+  student = Student.new(
+    surname: "Иванов",
+    name: "Иван",
+    patronymic: "Иванович",
+	id: "1",
+    phone: "1234567890",
+    email: "ivanov@example.com",
+	git:"github.com/ivanov"
+  )
+  puts student.to_s
 
-student2 = Student.new(surname: "Иванов", name: "Иван", patronymic: "Иванович", id: 1, phone: "123-456-789", 
-telegram: "@ivanov", email: "ivanov@example.com", git: "github.com/ivanov")
-puts student1
-puts student2
+  # Попробуем создать объект с неверным номером телефона
+  invalid_student = Student.new(
+    surname: "Петров",
+    name: "Петр",
+    patronymic: "Петрович",
+    phone: "123abc456",
+    email: "petrov@example.com"
+  )
+rescue ArgumentError => e
+  puts e.message  # Выводим сообщение об ошибке
+end

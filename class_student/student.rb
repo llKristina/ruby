@@ -1,6 +1,7 @@
 class Student
   # Объявляем геттеры и сеттеры 
-  attr_accessor :id, :surname, :name, :patronymic, :phone, :telegram, :email, :git
+  attr_accessor :id, :surname, :name, :patronymic, :git
+  attr_reader :phone, :telegram, :email
 
   # Конструктор принимает аргументы в виде хэша
   def initialize(attributes = {})
@@ -11,10 +12,12 @@ class Student
 
     # Устанавливаем необязательные поля с валидацией через сеттеры
     @id = attributes[:id]
-    self.phone = attributes[:phone]  
-    self.telegram = attributes[:telegram]
-    self.email = attributes[:email]
     self.git = attributes[:git]
+	set_contacts(
+      phone: attributes[:phone],
+      telegram: attributes[:telegram],
+      email: attributes[:email]
+    )
   end
   
    # Метод для проверки, является ли строка телефонным номером
@@ -39,21 +42,6 @@ class Student
 
 
   # Переопределяем сеттеры
-  def phone=(value)
-    raise ArgumentError, "Неверный номер телефона" unless self.class.valid_phone?(value)
-	@phone = value
-  end
-  
-   def telegram=(value)
-    raise ArgumentError, "Неверный формат телеграма" unless self.class.valid_telegram?(value)
-    @telegram = value
-  end
-
-  def email=(value)
-    raise ArgumentError, "Неверный формат почты" unless self.class.valid_email?(value)
-    @email = value
-  end
-
   def git=(value)
     raise ArgumentError, "Неверный формат гита" unless self.class.valid_git?(value)
     @git = value
@@ -68,6 +56,13 @@ class Student
     unless contact_present?
       raise ArgumentError, "Необходимо указать хотя бы один контакт (Телефон, Telegram или Email)."
     end
+  end
+  
+   # Метод для установки контактов
+  def set_contacts(phone: nil, telegram: nil, email: nil)
+    self.phone = phone
+    self.telegram = telegram
+    self.email = email
   end
   
   def to_s
@@ -88,6 +83,21 @@ class Student
   # Проверка наличия любого контакта
   def contact_present?
     !@phone.nil? && @phone.strip != "" || !@telegram.nil? && @telegram.strip != "" || !@email.nil? && @email.strip != ""
+  end
+  
+   def phone=(value)
+    raise ArgumentError, "Неверный номер телефона" unless self.class.valid_phone?(value)
+	@phone = value
+  end
+  
+   def telegram=(value)
+    raise ArgumentError, "Неверный формат телеграма" unless self.class.valid_telegram?(value)
+    @telegram = value
+  end
+
+  def email=(value)
+    raise ArgumentError, "Неверный формат почты" unless self.class.valid_email?(value)
+    @email = value
   end
   
 end

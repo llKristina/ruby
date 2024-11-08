@@ -12,7 +12,6 @@ begin
   )
   puts student.to_s
 
-  # Попробуем создать объект с неверным номером телефона
   invalid_student = Student.new(
     surname: "Петров",
     name: "Петр",
@@ -21,5 +20,5 @@ begin
     email: "petrov@example.com"
   )
 rescue ArgumentError => e
-  puts e.message  # Выводим сообщение об ошибке
+  puts e.message  
 end

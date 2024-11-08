@@ -50,7 +50,7 @@ class Student
    # Метод проверки наличия Git и любого контакта
   def validate
     unless git_present?
-      raise ArgumentError, "Git URL обязателен."
+      raise ArgumentError, "Git обязателен."
     end
 
     unless contact_present?

@@ -6,9 +6,9 @@ class Student
   # Конструктор принимает аргументы в виде хэша
   def initialize(attributes = {})
     # Устанавливаем обязательные поля
-    @surname = attributes[:surname] 
-    @name = attributes[:name] 
-    @patronymic = attributes[:patronymic] 
+    self.surname = attributes[:surname] 
+    self.name = attributes[:name] 
+    self.patronymic = attributes[:patronymic] 
 
     # Устанавливаем необязательные поля с валидацией через сеттеры
     @id = attributes[:id]
@@ -18,6 +18,21 @@ class Student
       telegram: attributes[:telegram],
       email: attributes[:email]
     )
+  end
+  
+  def self.valid_surname?(surname)
+	raise ArgumentError, "Некорректный формат ФИО" 
+	unless surname.nil? || !!(surname =~ /^[A-Za-zА-Яа-я]+$/)
+  end
+
+  def self.valid_surname?(name)
+	raise ArgumentError, "Некорректный формат ФИО" 
+	unless name.nil? || !!(name =~ /^[A-Za-zА-Яа-я]+$/)
+  end
+  
+  def self.valid_surname?(patronymic)
+	raise ArgumentError, "Некорректный формат ФИО" 
+	unless patronymic.nil? || !!(patronymic =~ /^[A-Za-zА-Яа-я]+$/)
   end
   
    # Метод для проверки, является ли строка телефонным номером

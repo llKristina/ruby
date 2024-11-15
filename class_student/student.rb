@@ -25,12 +25,12 @@ class Student
 	unless surname.nil? || !!(surname =~ /^[A-Za-zА-Яа-я]+$/)
   end
 
-  def self.valid_surname?(name)
+  def self.valid_name?(name)
 	raise ArgumentError, "Некорректный формат ФИО" 
 	unless name.nil? || !!(name =~ /^[A-Za-zА-Яа-я]+$/)
   end
   
-  def self.valid_surname?(patronymic)
+  def self.valid_patronymic?(patronymic)
 	raise ArgumentError, "Некорректный формат ФИО" 
 	unless patronymic.nil? || !!(patronymic =~ /^[A-Za-zА-Яа-я]+$/)
   end

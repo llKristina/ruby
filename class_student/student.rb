@@ -21,17 +21,14 @@ class Student
   end
   
   def self.valid_surname?(surname)
-	raise ArgumentError, "Некорректный формат ФИО" 
 	unless surname.nil? || !!(surname =~ /^[A-Za-zА-Яа-я]+$/)
   end
 
   def self.valid_name?(name)
-	raise ArgumentError, "Некорректный формат ФИО" 
 	unless name.nil? || !!(name =~ /^[A-Za-zА-Яа-я]+$/)
   end
   
-  def self.valid_patronymic?(patronymic)
-	raise ArgumentError, "Некорректный формат ФИО" 
+  def self.valid_patronymic?(patronymic) 
 	unless patronymic.nil? || !!(patronymic =~ /^[A-Za-zА-Яа-я]+$/)
   end
   
@@ -57,6 +54,23 @@ class Student
 
 
   # Переопределяем сеттеры
+  
+ def surname=(value)
+  raise ArgumentError, "Некорректный формат фамилии" unless self.class.valid_surname?(value)
+  @surname = value
+ end
+  
+ def name=(value)
+  raise ArgumentError, "Некорректный формат имени" unless self.class.valid_name?(value)
+  @name = value
+ end
+
+ def patronymic=(value)
+  raise ArgumentError, "Некорректный формат отчества" unless self.class.valid_patronymic?(value)
+  @patronymic = value
+ end
+
+  
   def git=(value)
     raise ArgumentError, "Неверный формат гита" unless self.class.valid_git?(value)
     @git = value

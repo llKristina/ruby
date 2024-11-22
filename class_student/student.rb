@@ -154,3 +154,46 @@ end
   
 end
 
+class Student_short
+  attr_reader :id, :name_initials, :git, :contact
+
+  # Конструктор, принимающий объект класса Student
+  def initialize(student)
+    if student.is_a?(Student)
+      @id = student.id
+      @name_initials = "#{student.surname} #{student.name[0]}.#{student.patronymic[0]}."
+      @git = student.git
+      @contact = get_contact(student)
+    elsif student.is_a?(Integer) && ARGV[1].is_a?(String)
+      parse_string(student, ARGV[1])
+    else
+      raise ArgumentError, "Неверные аргументы конструктора"
+    end
+  end
+
+  # Второй конструктор, принимающий ID и строку
+  def self.from_string(id, str)
+    student = new(nil)
+    student.send(:parse_string, id, str)
+    student
+  end
+
+  private
+
+  def get_contact(student)
+    return "telegram: #{student.telegram}" unless student.telegram.nil?
+    return "email: #{student.email}" unless student.email.nil?
+    return "phone: #{student.phone}" unless student.phone.nil?
+    "контакт отсутствует"
+  end
+
+  def parse_string(id, str)
+    parts = str.split(';').map(&:strip)
+    raise ArgumentError, "Неверный формат строки" unless parts.length == 3
+
+    @id = id
+    @name_initials = parts[0]
+    @git = parts[1]
+    @contact = parts[2]
+  end
+end

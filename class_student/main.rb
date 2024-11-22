@@ -20,6 +20,8 @@ begin
 	git:"github.com/petrov"
   )
   invalid_student.validate
+  
+  puts student.getInfo
 rescue ArgumentError => e
   puts e.message  
 end

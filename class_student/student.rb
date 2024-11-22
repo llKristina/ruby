@@ -1,7 +1,5 @@
 class Student
-  # Объявляем геттеры и сеттеры 
-  attr_accessor :id, :surname, :name, :patronymic, :git
-  attr_reader :phone, :telegram, :email
+  attr_reader :id, :surname, :name, :patronymic, :phone, :telegram, :email, :git
 
   # Конструктор принимает аргументы в виде хэша
   def initialize(attributes = {})
@@ -21,15 +19,15 @@ class Student
   end
   
   def self.valid_surname?(surname)
-	unless surname.nil? || !!(surname =~ /^[A-Za-zА-Яа-я]+$/)
+	surname.nil? || !!(surname =~ /^[A-Za-zА-Яа-я]+$/)
   end
 
   def self.valid_name?(name)
-	unless name.nil? || !!(name =~ /^[A-Za-zА-Яа-я]+$/)
+	name.nil? || !!(name =~ /^[A-Za-zА-Яа-я]+$/)
   end
   
   def self.valid_patronymic?(patronymic) 
-	unless patronymic.nil? || !!(patronymic =~ /^[A-Za-zА-Яа-я]+$/)
+	patronymic.nil? || !!(patronymic =~ /^[A-Za-zА-Яа-я]+$/)
   end
   
    # Метод для проверки, является ли строка телефонным номером
@@ -78,14 +76,12 @@ class Student
   
    # Метод проверки наличия Git и любого контакта
   def validate
-    unless git_present?
-      raise ArgumentError, "Git обязателен."
-    end
+  return false unless git_present?
+  return false unless contact_present?
 
-    unless contact_present?
-      raise ArgumentError, "Необходимо указать хотя бы один контакт (Телефон, Telegram или Email)."
-    end
-  end
+  true
+end
+
   
    # Метод для установки контактов
   def set_contacts(phone: nil, telegram: nil, email: nil)
@@ -95,14 +91,39 @@ class Student
   end
   
   def to_s
-   "Student: #{@surname} #{@name} #{@patronymic}
-    ID: #{@id} 
-	Phone: #{@phone}
-    Telegram: #{@telegram} 
-	Email: #{@email}
-	Git: #{@git}"
+    "Student: #{@surname} #{@name} #{@patronymic}\n" \
+    "ID: #{@id}\n" \
+    "Phone: #{@phone}\n" \
+    "Telegram: #{@telegram}\n" \
+    "Email: #{@email}\n" \
+    "Git: #{@git}"
   end
+  
+  
+    # Основной метод получения краткой информации
+  def getInfo
+    "#{get_name_with_initials}; #{git}; #{get_contact}"
+  end
+   
   private
+  
+   # Метод для получения инициалов
+  def get_initials
+    "#{name[0]}.#{patronymic[0]}."
+  end
+
+  # Метод для получения фамилии с инициалами
+  def get_name_with_initials
+    "#{surname} #{get_initials}"
+  end
+
+  # Метод для получения контактной информации
+  def get_contact
+    return "telegram: #{telegram}" unless telegram.nil?
+    return "email: #{email}" unless email.nil?
+    return "phone: #{phone}" unless phone.nil?
+    "контакт отсутствует"
+  end
 
   # Проверка наличия Git
   def git_present?
@@ -111,7 +132,9 @@ class Student
 
   # Проверка наличия любого контакта
   def contact_present?
-    !@phone.nil? && @phone.strip != "" || !@telegram.nil? && @telegram.strip != "" || !@email.nil? && @email.strip != ""
+    (!@phone.nil? && @phone.strip != "") || 
+    (!@telegram.nil? && @telegram.strip != "") || 
+    (!@email.nil? && @email.strip != "")
   end
   
    def phone=(value)
@@ -130,3 +153,4 @@ class Student
   end
   
 end
+

@@ -2,19 +2,18 @@ class Student
   attr_reader :id, :surname, :name, :patronymic, :phone, :telegram, :email, :git
 
   # Конструктор принимает аргументы в виде хэша
-  def initialize(attributes = {})
-    # Устанавливаем обязательные поля
-    self.surname = attributes[:surname] 
-    self.name = attributes[:name] 
-    self.patronymic = attributes[:patronymic] 
+ def initialize(id: nil, surname:, name:, patronymic:, git: nil, phone: nil, telegram: nil, email: nil)  
+    self.surname = surname 
+    self.name = name 
+    self.patronymic = patronymic 
 
     # Устанавливаем необязательные поля с валидацией через сеттеры
-    @id = attributes[:id]
-    self.git = attributes[:git]
+    @id = id
+    self.git = git
 	set_contacts(
-      phone: attributes[:phone],
-      telegram: attributes[:telegram],
-      email: attributes[:email]
+      phone: phone,
+      telegram:telegram,
+      email: email
     )
   end
   
@@ -75,9 +74,8 @@ class Student
   end
   
    # Метод проверки наличия Git и любого контакта
-  def validate
-  return false unless git_present?
-  return false unless contact_present?
+  def validate?
+  git_present? && contact_present?
 
   true
 end
@@ -154,3 +152,42 @@ end
   
 end
 
+class Student_short
+  attr_reader :id, :name_initials, :git, :contact
+
+  # Конструктор, принимающий объект класса Student
+  def initialize(student_or_id, info = nil)
+    if student_or_id.is_a?(Student)
+      student = student_or_id
+      @id = student.id
+      @name_initials = "#{student.surname} #{student.name[0]}.#{student.patronymic[0]}."
+      @git = student.git
+      @contact = get_contact(student)
+    elsif student_or_id.is_a?(Integer) && info.is_a?(String)
+      @id = student_or_id
+      parse_info_string(info)
+    else
+      raise ArgumentError, "Неверные аргументы конструктора"
+    end
+  end
+
+  private
+
+  # Метод для получения контакта из объекта Student
+  def get_contact(student)
+    return "telegram: #{student.telegram}" unless student.telegram.nil?
+    return "email: #{student.email}" unless student.email.nil?
+    return "phone: #{student.phone}" unless student.phone.nil?
+    "контакт отсутствует"
+  end
+
+  # Метод для разбора строки с информацией
+  def parse_info_string(info)
+    parts = info.split(';').map(&:strip)
+    raise ArgumentError, "Неверный формат строки" unless parts.length == 3
+
+    @name_initials = parts[0]
+    @git = parts[1]
+    @contact = parts[2]
+  end
+end

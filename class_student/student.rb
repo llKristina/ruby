@@ -50,10 +50,5 @@ class Student < Person
     "#{get_name_with_initials}; #{git}; #{get_contact}"
   end
 
-  private
-
-  # Метод для получения фамилии с инициалами
-  def get_name_with_initials
-    "#{surname} #{name[0]}.#{patronymic[0]}."
-  end
+ 
 end

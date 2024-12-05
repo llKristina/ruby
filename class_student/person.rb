@@ -60,4 +60,9 @@ class Person
     return "phone: #{phone}" unless phone.nil?
     "контакт отсутствует"
   end
+
+  # Метод для получения фамилии с инициалами
+  def get_name_with_initials
+    "#{surname} #{name[0]}.#{patronymic[0]}."
+  end
 end

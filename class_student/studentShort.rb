@@ -15,7 +15,7 @@ class StudentShort < Person
   # Инициализация на основе объекта класса Student
   def initialize_from_student(student)
     @id = student.id
-    @surname_initials = "#{student.surname} #{student.name[0]}.#{student.patronymic[0]}."
+    @surname_initials = "#{student.get_name_with_initials}"
     @git = student.git
     @contact = student.get_contact
   end

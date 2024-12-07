@@ -23,7 +23,7 @@ class StudentShort < Person
   # Инициализация на основе строки с информацией
   def initialize_from_info(id, info_string)
     @id = id
-    parts = info_string.split(';').map(&:strip)
+    parts = info_string.split(',')
     raise ArgumentError, "Некорректный формат строки" if parts.size != 3
 
     @surname_initials = parts[0]

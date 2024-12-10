@@ -1,17 +1,16 @@
 require_relative 'student'
-
+require_relative 'StudentShort'
 begin
   student = Student.new(
+	id: "1",
     surname: "Иванов",
     name: "Иван",
     patronymic: "Иванович",
-	id: "1",
     phone: "1234567890",
     email: "ivanov@example.com",
 	git:"github.com/ivanov"
   )
-  student.validate
-  puts student.to_s
+
 
   invalid_student = Student.new(
     surname: "Петров",
@@ -19,9 +18,10 @@ begin
     patronymic: "Петрович",
 	git:"github.com/petrov"
   )
-  invalid_student.validate
+
   
-  puts student.getInfo
+ puts student_short_from_student = StudentShort.from_student(student)
+  
 rescue ArgumentError => e
   puts e.message  
 end

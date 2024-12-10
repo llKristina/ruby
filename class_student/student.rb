@@ -2,7 +2,7 @@ require_relative 'person'
 class Student < Person
   attr_reader :surname, :name, :patronymic, :phone, :telegram, :email
 
- def initialize(surname:, name:, patronymic:,phone: nil, telegram: nil, email: nil)
+ def initialize(surname:, name:, patronymic:, id: nil, phone: nil, telegram: nil, email: nil, git: nil)
     self.surname = surname
     self.name = name
 	self.patronymic = patronymic

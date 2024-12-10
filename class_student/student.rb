@@ -102,7 +102,7 @@ class Student < Person
       !@telegram.nil? || !@phone.nil? || !@email.nil?
   end
 
-  def validate
+  def validate?
     has_contact? && has_git?   
   end
 end

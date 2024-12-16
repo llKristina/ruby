@@ -91,18 +91,10 @@ class Student < Person
 
   # Метод для получения краткой информации
   def getInfo
-    "#{get_name_with_initials}; #{git}; #{get_contact}"
+    "#{get_name_with_initials}, #{git}, #{get_contact}"
   end
   # Метод для получения фамилии с инициалами
   def get_name_with_initials
     "#{surname} #{name[0]}.#{patronymic[0]}."
-  end
-  
- def has_contact?
-      !@telegram.nil? || !@phone.nil? || !@email.nil?
-  end
-
-  def validate?
-    has_contact? && has_git?   
-  end
+  end7
 end

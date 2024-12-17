@@ -37,3 +37,13 @@ class ArrayProcessor
     end
     accumulator
  end
+ 
+def min_max
+    min = @array[0]
+    max = @array[0]
+    @array.each do |element|
+      min = element if element < min
+      max = element if element > max
+    end
+    [min, max]
+end

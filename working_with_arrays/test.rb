@@ -17,3 +17,6 @@ puts processor.none? { |x| x == 4 }
 # Тестируем метод reduce
 puts processor.reduce { |sum, x| sum + x } 
 puts processor.reduce(10) { |sum, x| sum + x } 
+
+# Тестируем метод min_max
+puts processor.min_max.inspect

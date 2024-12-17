@@ -1,3 +1,11 @@
+# Дан целочисленный массив. Необходимо найти количество элементов,
+# расположенных после последнего максимального.
+def count_elements_after_last_max(array)
+  max_index = array.rindex(array.max)  # Находим индекс последнего максимального элемента
+  count = array.size - max_index - 1   # Количество элементов после последнего максимального
+  puts "Количество элементов после последнего максимального: #{count}"
+end
+
 #Дан целочисленный массив. Необходимо разместить элементы,
 #расположенные до минимального, в конце массива.
 def rearrange_array(array)
@@ -54,15 +62,17 @@ def find_prime_divisors(numbers)
   puts "Список всех простых делителей: #{prime_divisors}"
 end
 
-puts "Введите массив через пробел (enter для прекращения ввода)"	
+
+puts "Введите массив через пробел (enter для прекращения ввода)"  
 array = gets.chomp.split.map(&:to_i)
 loop do
   puts "Введите номер функции (для выхода введите 0):"
-  puts "1: Перемещение элементов до минимального в конец массива"
-  puts "2: Поиск максимального элемента в интервале"
-  puts "3: Вывод индексов элементов меньше левого соседа"
-  puts "4: Поиск простых делителей элементов списка"
-  puts "5: Изменить массив"
+  puts "1: Количество элементов после последнего максимального"
+  puts "2: Перемещение элементов до минимального в конец массива"
+  puts "3: Поиск максимального элемента в интервале"
+  puts "4: Вывод индексов элементов меньше левого соседа"
+  puts "5: Поиск простых делителей элементов списка"
+  puts "6: Изменить массив"
 
   select_function = gets.chomp.to_i
 
@@ -70,21 +80,24 @@ loop do
 
   case select_function
   when 1
-    puts "Измененный массив: #{rearrange_array(array)}"
+	puts "Количество элементов: #{count_elements_after_last_max(array)}"
   when 2
+    puts "Измененный массив: #{rearrange_array(array)}"
+  when 3
     puts "Введите начало интервала:"
     a = gets.chomp.to_i
     puts "Введите конец интервала:"
     b = gets.chomp.to_i
     puts "Максимальный элемент: #{find_max(array, a, b)}"
-  when 3
-    puts "Индексы: #{less_than_neighbor(array)}"
   when 4
-    puts "Простые делители: #{find_prime_divisors(array)}"
+    puts "Индексы: #{less_than_neighbor(array)}"
   when 5
+    puts "Простые делители: #{find_prime_divisors(array)}"
+  when 7
     puts "Введите массив через пробел (enter для прекращения ввода)"
     array = gets.chomp.split.map(&:to_i)
   else
     puts "Такой функции нет"
   end
 end
+

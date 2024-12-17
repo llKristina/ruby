@@ -80,19 +80,19 @@ loop do
 
   case select_function
   when 1
-	puts "Количество элементов: #{count_elements_after_last_max(array)}"
+	puts "#{count_elements_after_last_max(array)}"
   when 2
-    puts "Измененный массив: #{rearrange_array(array)}"
+    puts "#{rearrange_array(array)}"
   when 3
     puts "Введите начало интервала:"
     a = gets.chomp.to_i
     puts "Введите конец интервала:"
     b = gets.chomp.to_i
-    puts "Максимальный элемент: #{find_max(array, a, b)}"
+    puts "#{find_max(array, a, b)}"
   when 4
-    puts "Индексы: #{less_than_neighbor(array)}"
+    puts "#{less_than_neighbor(array)}"
   when 5
-    puts "Простые делители: #{find_prime_divisors(array)}"
+    puts "#{find_prime_divisors(array)}"
   when 7
     puts "Введите массив через пробел (enter для прекращения ввода)"
     array = gets.chomp.split.map(&:to_i)

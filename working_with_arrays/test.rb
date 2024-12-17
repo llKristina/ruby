@@ -20,3 +20,6 @@ puts processor.reduce(10) { |sum, x| sum + x }
 
 # Тестируем метод min_max
 puts processor.min_max.inspect
+
+# Тестируем метод find_all
+puts processor.find_all { |x| x.even? }.inspect 

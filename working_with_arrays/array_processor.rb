@@ -47,3 +47,11 @@ def min_max
     end
     [min, max]
 end
+
+def find_all
+    result = []
+    @array.each do |element|
+      result << element if yield(element)
+    end
+    result
+ end

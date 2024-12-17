@@ -18,3 +18,10 @@ class ArrayProcessor
     end
     nil
  end
+ 
+ def none?
+    @array.each do |element|
+      return false if yield(element)
+    end
+    true
+ end

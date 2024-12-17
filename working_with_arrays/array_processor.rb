@@ -11,3 +11,10 @@ class ArrayProcessor
     end
     false
  end
+ 
+ def find_index
+    @array.each_with_index do |element, index|
+      return index if yield(element)
+    end
+    nil
+ end

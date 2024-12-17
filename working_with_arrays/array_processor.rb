@@ -25,3 +25,15 @@ class ArrayProcessor
     end
     true
  end
+ 
+ def reduce(initial_value = nil)
+    accumulator = initial_value
+    @array.each do |element|
+      if accumulator.nil?
+        accumulator = element
+      else
+        accumulator = yield(accumulator, element)
+      end
+    end
+    accumulator
+ end

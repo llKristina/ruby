@@ -13,3 +13,7 @@ puts processor.find_index { |x| x == 10 }
 # Тестируем метод none?
 puts processor.none? { |x| x < 0 }  
 puts processor.none? { |x| x == 4 } 
+
+# Тестируем метод reduce
+puts processor.reduce { |sum, x| sum + x } 
+puts processor.reduce(10) { |sum, x| sum + x } 

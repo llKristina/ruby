@@ -25,5 +25,5 @@ class StudentShort < Person
 		"ID: #{@id}, Name: #{@surname_initials}, Git: #{@git}, Contact: #{@contact}"
 	end
 	private_class_method :new
-	private id=, git=
+	private :id=, :git=
 end

@@ -73,7 +73,7 @@ class Student < Person
   end
   
     # Метод для получения контактной информации
-  def get_contact
+  def contact
     return "telegram: #{telegram}" unless telegram.nil?
     return "email: #{email}" unless email.nil?
     return "phone: #{phone}" unless phone.nil?
@@ -94,7 +94,7 @@ class Student < Person
     "#{get_name_with_initials}, #{git}, #{get_contact}"
   end
   # Метод для получения фамилии с инициалами
-  def get_name_with_initials
+  def surname_initials
     "#{surname} #{name[0]}.#{patronymic[0]}."
-  end7
+  end
 end

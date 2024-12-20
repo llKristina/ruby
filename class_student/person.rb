@@ -49,7 +49,7 @@ class Person
 	  
 	def id=(value)
 		raise ArgumentError, "Неверный формат ID" unless self.class.valid_id?(value)
-		@id = id
+		@id = value
 	end
 
 	def has_git?

@@ -1,19 +1,16 @@
 def count_elements_after_last_max(array)
     max_index = array.rindex(array.max)
     count = array.size - max_index - 1
-    count
 end
 
 def rearrange_array(array)
     min_arr = array.index(array.min)
     result = array[min_arr..-1] + array[0...min_arr]
-    result
 end
 
 def find_max(array, a, b)
     return "Некорректный интервал." if a < 0 || b >= array.size || a > b
     max = array[a..b].max
-    max
 end
 
 def less_than_neighbor(array)

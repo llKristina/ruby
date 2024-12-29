@@ -9,9 +9,11 @@ def rearrange_array(array)
 end
 
 def find_max(array, a, b)
-    return "Некорректный интервал." if a < 0 || b >= array.size || a > b
-    max = array[a..b].max
+  raise ArgumentError if a < 0 || b >= array.size || a > b
+
+  array[a..b].max
 end
+
 
 def less_than_neighbor(array)
     return { indices: [], count: 0 } if array.size < 2

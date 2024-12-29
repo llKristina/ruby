@@ -1,25 +1,40 @@
-require_relative 'array_processor'
+require_relative "./array_processor"  
+require 'minitest/autorun'
 
-processor = ArrayProcessor.new([1, 2, 3, 4, 5])
+class ArrayProcessorTest < Minitest::Test
+  def setup
+    @array_processor = ArrayProcessor.new([1, 2, 3, 4, 5])
+    @empty_processor = ArrayProcessor.new([])
+  end
 
-# Тестируем метод any?
-puts processor.any? { |x| x > 3 }  
-puts processor.any? { |x| x > 10 }
+  def test_any
+    assert_equal true, @array_processor.any? { |x| x > 3 }
+    assert_equal false, @array_processor.any? { |x| x > 10 }
+  end
 
-# Тестируем метод find_index
-puts processor.find_index { |x| x == 3 }  
-puts processor.find_index { |x| x == 10 }  
+  def test_find_index
+    assert_equal 3, @array_processor.find_index { |x| x == 4 }
+    assert_nil @array_processor.find_index { |x| x > 10 }
+  end
 
-# Тестируем метод none?
-puts processor.none? { |x| x < 0 }  
-puts processor.none? { |x| x == 4 } 
+  def test_none
+    assert_equal true, @array_processor.none? { |x| x > 10 }
+    assert_equal false, @array_processor.none? { |x| x == 3 }
+  end
 
-# Тестируем метод reduce
-puts processor.reduce { |sum, x| sum + x } 
-puts processor.reduce(10) { |sum, x| sum + x } 
+  def test_reduce
+    assert_equal 15, @array_processor.reduce(0) { |sum, x| sum + x }
+    assert_equal 120, @array_processor.reduce(1) { |prod, x| prod * x }
+    assert_equal 1, @array_processor.reduce { |min, x| min < x ? min : x }
+  end
 
-# Тестируем метод min_max
-puts processor.min_max.inspect
+  def test_min_max
+    assert_equal [1, 5], @array_processor.min_max
+    assert_nil @empty_processor.min_max if @empty_processor
+  end
 
-# Тестируем метод find_all
-puts processor.find_all { |x| x.even? }.inspect 
+  def test_find_all
+    assert_equal [2, 4], @array_processor.find_all { |x| x.even? }
+    assert_equal [], @array_processor.find_all { |x| x > 10 }
+  end
+end

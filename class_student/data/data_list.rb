@@ -3,8 +3,8 @@ class DataList
   private attr_accessor :selected
 
   def initialize(data, column_names = [])
-    self.data = data.sort
-    self.column_names = column_names
+    self.data = data
+    @column_names = column_names
     @selected = []
   end
 
@@ -23,10 +23,10 @@ class DataList
   end
 
     def get_data
-        result = [self.get_names]
-        self.selected.each do |selected_index|
-            obj = self.data[selected_index]
-			row = build_row(selected_index + 1, obj)            
+        result = [get_names]
+        @selected.each do |index|
+            obj = @data[index]
+			row = build_row(index + 1, obj)            
 			result << row
         end
         DataTable.new(result)

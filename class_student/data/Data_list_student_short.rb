@@ -2,16 +2,15 @@ require_relative 'data_list'
 require_relative 'Data_table'
 
 class DataListStudentShort < DataList
+	
 	private
 
-	def column_names
+	def get_names
 		["ID", "Name", "Git", "Contact"]
 	end
 
-	def get_objects_array
-		data.map.with_index(1) do |object, index|
-			[index, object.surname_initials, object.git, object.contact]
-		
-		end
+	def build_row(index, student)
+		[index, student.surname_initials, student.git, student.contact]
 	end
+  
 end

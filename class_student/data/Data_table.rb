@@ -12,14 +12,15 @@ class DataTable
     @data = data
   end
 
-  def get_element(row, col)
-    return nil unless row.between?(0, @data.size - 1) && col.between?(0, @data[0].size - 1)
+  def get_element(row,col)
+		raise IndexError, "Неверный индекс строки" if row < 0 || row >= row_count
+		raise IndexError, "Неверный индекс столбца" if col < 0 || col >= column_count
 
-    @data[row][col]
-  end
+		data[row][col]
+	end
 
   def column_count
-    @data[0]&.size || 0
+    @data[0].size || 0
   end
 
   def row_count

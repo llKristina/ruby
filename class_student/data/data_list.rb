@@ -4,7 +4,6 @@ class DataList
 
   def initialize(data, column_names = [])
     self.data = data
-    @column_names = column_names
     @selected = []
   end
 
@@ -19,7 +18,7 @@ class DataList
   end
 
   def get_names
-	@column_names
+	column_names
   end
 
     def get_data

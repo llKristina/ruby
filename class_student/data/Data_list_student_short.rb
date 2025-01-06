@@ -5,7 +5,7 @@ class DataListStudentShort < DataList
 	
 	private
 
-	def get_names
+	def column_names
 		["ID", "Name", "Git", "Contact"]
 	end
 

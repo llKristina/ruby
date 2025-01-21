@@ -2,9 +2,10 @@ require_relative 'studentShort'
 require_relative 'student'
 require_relative 'data_list_student_short'
 require_relative 'data_list'
-require 'json'
+require 'yaml'
+require 'date'
 
-class StudentListJSON
+class StudentListYAML
   attr_reader :path_to_file
 
   def initialize(path_to_file)
@@ -22,8 +23,12 @@ class StudentListJSON
   def load_students
     if File.exist?(@path_to_file)
       file_content = File.read(@path_to_file)
-      parsed_data = JSON.parse(file_content, symbolize_names: true)
-      @students = parsed_data.map { |data| Student.new(**data) }
+       student_data = YAML.safe_load(
+        file_content,
+        permitted_classes: [Symbol],
+        symbolize_names: true
+      )
+	  @students = student_data.map { |data| Student.new(**data) }
     else
       @students = []
     end
@@ -42,7 +47,7 @@ class StudentListJSON
         git: student.git
       }
     end
-    File.open(@path_to_file, 'w') { |file| file.write(JSON.pretty_generate(serialized_data)) }
+    File.open(@path_to_file, 'w') { |file| file.write(YAML.pretty_generate(serialized_data)) }
   end
 
   def find_student_by_id(id)
@@ -58,7 +63,7 @@ class StudentListJSON
     short_list = @students[start_index..end_index] || []
     return existing_list || DataListStudentShort.new([]) if short_list.empty?
 
-    short_list = short_list.map { |student| StudentShort.from_student(student) }
+    short_list = short_list.map  { |student| StudentShort.from_student(student) }
     if existing_list
       existing_list.data = short_list
       short_list.each_with_index { |_, idx| existing_list.select(idx) }

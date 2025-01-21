@@ -1,7 +1,6 @@
 require_relative 'studentShort'
 require_relative 'student'
 require_relative 'data_list_student_short'
-require_relative 'data_list'
 
 class StudentList
   attr_reader :path_to_file
@@ -28,7 +27,9 @@ class StudentList
   end
 
   def find_student_by_id(id)
-    student = @students.find  {|student| StudentShort.from_student(student)}
+    student = @students.find { |student| StudentShort.from_student(student) }
+raise IndexError, "Студент с таким ID отсутствует" unless student
+
     raise IndexError, "Студент с таким ID отсутствует" unless student
 
     student

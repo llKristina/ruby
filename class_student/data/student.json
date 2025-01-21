@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "surname": "Ivanov",
+    "name": "Ivan",
+    "patronymic": "Ivanovich",
+    "phone": "1234567890",
+    "telegram": "@example",
+    "email": "Test@example.com",
+    "git": "github.com/ivanov"
+  },
+  {
+    "id": 2,
+    "surname": "Petrov",
+    "name": "Alexandr",
+    "patronymic": "Alexandtovich",
+    "phone": "1234567890",
+    "telegram": "@Alexandr",
+    "email": "Alex@example.com",
+    "git": "github.com/alex"
+  },
+  {
+    "id": 3,
+    "surname": "Petrov",
+    "name": "Inan",
+    "patronymic": "Alexandtovich",
+    "phone": "1234567890",
+    "telegram": "@Vannn",
+    "email": "v34@example.com",
+    "git": "github.com/van8"
+  }
+]

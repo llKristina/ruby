@@ -19,11 +19,11 @@ class StudentList
   end
 
   def load_students
-	 @strategy.read(@path_to_file).map {|data| Student.new(**data)}
+	 @strategy.load_students(@path_to_file).map {|data| Student.new(**data)}
   end
 
   def save_students
-		@strategy.write(@path_to_file, @students)
+		@strategy.save_students(@path_to_file, @students)
   end
 
   def find_student_by_id(id)

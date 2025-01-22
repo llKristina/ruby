@@ -1,7 +1,7 @@
 require_relative 'db_connection'
-require_relative '"C:\Users\admin\Documents\GitHub\ruby\class_student\student.rb"'
-require_relative '"C:\Users\admin\Documents\GitHub\ruby\class_student\studentShort.rb"'
-require_relative '"C:\Users\admin\Documents\GitHub\ruby\class_student\data\Data_list_student_short.rb"'
+require_relative 'C:\Users\admin\Documents\GitHub\ruby\class_student\studentShort.rb'
+require_relative 'C:\Users\admin\Documents\GitHub\ruby\class_student\data\Data_list_student_short.rb'
+require_relative 'student_database'
 
 class StudentsListDB
   def initialize
@@ -42,8 +42,12 @@ class StudentsListDB
       )
     end
 
-    DataListStudentShort.new(short_students)
-  end
+   data_list = DataListStudentShort.new(short_students)
+   
+  (0..n-1).each { |index| data_list.select(index) }
+
+  data_list
+end
 
   def add_student(student)
     result = @db.insert_student(student)

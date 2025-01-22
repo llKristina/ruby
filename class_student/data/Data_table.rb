@@ -11,6 +11,10 @@ class DataTable
     end
     @data = data
   end
+  
+  def inspect
+    @data.map { |row| row.join(" | ") }.join("\n")  
+  end
 
   def get_element(row,col)
 		raise IndexError, "Неверный индекс строки" if row < 0 || row >= row_count

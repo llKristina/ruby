@@ -10,7 +10,7 @@ class DataListStudentShort < DataList
 	end
 
 	def build_row(index, student)
-		[index, student.surname_initials, student.git, student.contact]
+		[index+1, student.surname_initials, student.git, student.contact]
 	end
   
 end

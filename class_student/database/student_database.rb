@@ -1,11 +1,10 @@
 require_relative 'db_connection'
-require_relative '"C:\Users\admin\Documents\GitHub\ruby\class_student\data\student.rb"'
 
 class StudentDatabase
   def initialize
-    @db = DBConnection.client
+    @db = DBConnection.instance.client
   end
-  
+
   def find_by_id(id)
     result = @db.exec_params('SELECT * FROM students WHERE id = $1 LIMIT 1', [id])
     result.first
@@ -23,13 +22,13 @@ class StudentDatabase
     )
   end
 
-
   def update_student(id, student)
     @db.exec_params(
       'UPDATE students SET surname = $1, name = $2, patronymic = $3, phone = $4,
        telegram = $5, email = $6, git = $7 WHERE id = $8',
       [student.surname, student.name, student.patronymic, student.phone, student.telegram, student.email, student.git, id]
     )
+  end
 
   def delete_student(id)
     @db.exec_params('DELETE FROM students WHERE id = $1', [id])

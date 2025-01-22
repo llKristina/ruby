@@ -19,7 +19,7 @@ class StudentList
   end
 
   def load_students
-	 @strategy.load_students(@path_to_file).map {|data| Student.new(**data)}
+	 @strategy.load_students(@path_to_file)
   end
 
   def save_students

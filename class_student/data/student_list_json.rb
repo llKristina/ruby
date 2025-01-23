@@ -8,7 +8,7 @@ class StudentListJSON < Strategy
       file_content = File.read(path_to_file)
       JSON.parse(file_content, symbolize_names: true)
     else
-      return []
+      []
     end
   end
 

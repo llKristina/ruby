@@ -1,25 +1,25 @@
-require_relative 'studentShort'
-require_relative 'student'
+require_relative 'C:\Users\admin\Documents\GitHub\ruby\class_student\studentShort.rb'
+require_relative 'C:\Users\admin\Documents\GitHub\ruby\class_student\student.rb'
 require_relative 'data_list_student_short'
 
 class StudentList
-  attr_reader :path_to_file
+  attr_reader :students
 
   def initialize(path_to_file, strategy)
     @path_to_file = path_to_file
 	@strategy = strategy
-	@students = load_students
-    load_students
+	self.students = []
   end
 
-  def path_to_file=(new_path)
-    raise "Путь к файлу некорректен или файл отсутствует: #{new_path}" unless File.exist?(new_path)
-
-    @path_to_file = new_path
+   def students=(students)
+    unless students.nil? || students.is_a?(Array) 
+      raise ArgumentError, "Неверный тип данных"
+    end
+    @students = students
   end
 
   def load_students
-	 @strategy.load_students(@path_to_file)
+	 self.students = @strategy.load_students(@path_to_file)
   end
 
   def save_students

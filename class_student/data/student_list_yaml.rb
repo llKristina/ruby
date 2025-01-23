@@ -4,14 +4,15 @@ require 'date'
 
 class StudentListYAML < Strategy
 
-  def load_students(path_to_file)
-    if File.exist?(path_to_file)
-      file_content = File.read(path_to_file)
-      YAML.parse(file_content, symbolize_names: true)
-    else
-      return []
-    end
+ def load_students(path_to_file)
+  if File.exist?(path_to_file)
+    file_content = File.read(path_to_file)
+    YAML.load(file_content)
+  else
+    return []
   end
+end
+
 
   def save_students(path_to_file, students)
     serialized_data = students.map do |student|
@@ -26,8 +27,8 @@ class StudentListYAML < Strategy
         git: student[:git]
       }
     end
-    File.open(path_to_file, 'w') { |file| file.write(YAML.pretty_generate(serialized_data)) }
-  end
+	File.open(path_to_file, 'w') { |file| file.write(YAML.dump(serialized_data)) }
+end
 
 end
 

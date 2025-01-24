@@ -8,10 +8,13 @@ class DBConnection
     host: 'localhost',
     port: 5432
   }
+  
+  @instance = nil
 
   private_class_method :new
 
   def self.instance
+  
     @instance ||= new
   end
 

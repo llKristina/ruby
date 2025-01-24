@@ -1,5 +1,6 @@
 require_relative 'person'
 class StudentShort < Person
+
 	attr_reader :surname_initials, :contact
   
 	def initialize(surname_initials, id:nil, git:nil, contact:nil)
@@ -9,7 +10,7 @@ class StudentShort < Person
 	end
 
 	def self.from_student(student)
-		new(student.get_name_with_initials, id: student.id, git: student.git, contact: student.get_contact)
+		new(student.surname_initials, id: student.id, git: student.git, contact: student.contact)
 	end
 	
 	def self.from_string(id, input)

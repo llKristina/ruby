@@ -88,12 +88,16 @@ class Student < Person
     "Email: #{@email}\n" \
     "Git: #{@git}"
   end
+  
+   def ==(other)
+    return false unless other.is_a?(Student)
+    @surname == other.surname && @name == other.name && @patronymic == other.patronymic
+  end
 
-  # Метод для получения краткой информации
   def getInfo
     "#{get_name_with_initials}, #{git}, #{get_contact}"
   end
-  # Метод для получения фамилии с инициалами
+
   def surname_initials
     "#{surname} #{name[0]}.#{patronymic[0]}."
   end

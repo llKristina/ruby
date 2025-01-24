@@ -3,7 +3,6 @@ require_relative 'C:\Users\admin\Documents\GitHub\ruby\class_student\student.rb'
 require_relative 'data_list_student_short'
 
 class StudentList
-  attr_reader :students
 
   def initialize(path_to_file, strategy)
     @path_to_file = path_to_file
@@ -17,7 +16,7 @@ class StudentList
     end
     @students = students
   end
-
+  
   def load_students
 	 self.students = @strategy.load_students(@path_to_file)
   end
@@ -27,9 +26,7 @@ class StudentList
   end
 
   def find_student_by_id(id)
-    student = @students.find { |student| StudentShort.from_student(student) }
-raise IndexError, "Студент с таким ID отсутствует" unless student
-
+    student = @students.find { |student| student.id == id }
     raise IndexError, "Студент с таким ID отсутствует" unless student
 
     student
@@ -58,9 +55,11 @@ raise IndexError, "Студент с таким ID отсутствует" unles
   end
 
   def add_new_student(new_student)
+	if @students.include?(new_student)
+      raise ArgumentError, "#{new_student} уже существует"
+    end
     new_student.id = (@students.map(&:id).max || 0) + 1
     @students << new_student
-    save_students
     new_student
   end
 
@@ -70,16 +69,22 @@ raise IndexError, "Студент с таким ID отсутствует" unles
 
     updated_student.id = id
     @students[idx] = updated_student
-    save_students
     true
   end
 
   def remove_student(id)
     @students.reject! { |stud| stud.id == id }
-    save_students
   end
 
   def get_student_count
     @students.count
   end
+  
+   def get_students
+    @students 
+  end
+  
+ private
+    attr_reader :students
+ 
 end

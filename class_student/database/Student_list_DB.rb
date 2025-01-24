@@ -1,6 +1,6 @@
 require_relative 'C:\Users\admin\Documents\GitHub\ruby\class_student\studentShort.rb'
 require_relative 'C:\Users\admin\Documents\GitHub\ruby\class_student\data\Data_list_student_short.rb'
-require_relative 'student_database'
+
 
 class StudentsListDB
   def initialize

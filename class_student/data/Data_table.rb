@@ -1,3 +1,4 @@
+require_relative 'data_list'
 class DataTable
   private attr_reader :data
 

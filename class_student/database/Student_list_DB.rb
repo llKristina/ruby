@@ -3,8 +3,8 @@ require_relative 'C:\Users\admin\Documents\GitHub\ruby\class_student\data\Data_l
 require_relative 'student_database'
 
 class StudentsListDB
-  def initialize(db_connection = DBConnection.client)
-    @db = db_connection
+  def initialize
+    @db = DBConnection.instance
   end
 
   def find_student_by_id(id)
@@ -20,7 +20,7 @@ class StudentsListDB
     result = @db.exec_params('SELECT * FROM students ORDER BY id LIMIT $1 OFFSET $2', [n, offset])
 
     short_students = result.map { |row| StudentShort.from_student(build_student(row)) }
-    DataListStudentShort.new(short_students)
+	DataListStudentShort.new(short_students)
   end
 
   def add_student(student)
@@ -51,7 +51,7 @@ class StudentsListDB
   end
 
   def get_student_count
-    result = @db.exec('SELECT COUNT(*) FROM students')
+    result = @db.exec_query('SELECT COUNT(*) FROM students')
     result[0]['count'].to_i
   end
 

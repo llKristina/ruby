@@ -1,10 +1,11 @@
+require_relative 'data_table'
 class DataList
   private attr_reader :data
   private attr_accessor :selected
 
   def initialize(data, column_names = [])
     self.data = data
-    @selected = []
+    @selected = (0...data.size).to_a 
   end
 
   def select(number)
@@ -21,15 +22,15 @@ class DataList
 	column_names
   end
 
-    def get_data
-        result = [get_names]
-        @selected.each do |index|
-            obj = @data[index]
-			row = build_row(index + 1, obj)            
-			result << row
-        end
-        DataTable.new(result)
+  def get_data
+    result = [get_names]
+    @selected.each do |index|
+      obj = @data[index]  
+      row = build_row(index + 1, obj) 
+      result << row
     end
+    result  
+  end
 
     def data=(data)
         @data = data

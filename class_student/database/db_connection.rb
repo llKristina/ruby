@@ -1,21 +1,13 @@
 require 'pg'
 
 class DBConnection
-  @instance = nil
-
-  def self.instance
-    @instance ||= new
-  end
-
-  def client
+  def self.client
     @client ||= PG.connect(
       dbname: 'Students',   
-      user: 'postgres',         
+      user: 'postgres',       
       password: '123', 
-      host: 'localhost',        
+      host: 'localhost',      
       port: 5432               
     )
   end
-
-  private_class_method :new
 end

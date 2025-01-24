@@ -13,7 +13,7 @@ class Person
 	end
 	
 	def self.valid_id?(id)
-		id.is_a?(Integer) && id > 0
+		 id.nil? || (id.is_a?(Integer) && id > 0)
 	end
 	  
 	def self.valid_surname?(surname)

@@ -89,9 +89,12 @@ class Student < Person
     "Git: #{@git}"
   end
   
-   def ==(other)
+ def ==(other)
     return false unless other.is_a?(Student)
-    @surname == other.surname && @name == other.name && @patronymic == other.patronymic
+      @telegram == other.telegram &&
+      @email == other.email &&
+      @phone == other.phone &&
+      @git == other.git
   end
 
   def getInfo

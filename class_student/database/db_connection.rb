@@ -14,7 +14,6 @@ class DBConnection
   private_class_method :new
 
   def self.instance
-  
     @instance ||= new
   end
 

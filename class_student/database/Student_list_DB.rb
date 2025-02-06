@@ -1,5 +1,7 @@
 require_relative 'C:\Users\admin\Documents\GitHub\ruby\class_student\studentShort.rb'
 require_relative 'C:\Users\admin\Documents\GitHub\ruby\class_student\data\Data_list_student_short.rb'
+require_relative 'C:\Users\admin\Documents\GitHub\ruby\class_student\student.rb'
+
 require_relative 'db_connection'
 
 class StudentsListDB
@@ -16,12 +18,13 @@ class StudentsListDB
   end
 
   def get_k_n_student_short_list(k, n)
-    offset = (k - 1) * n
-    result = @db.exec_params('SELECT * FROM students ORDER BY id LIMIT $1 OFFSET $2', [n, offset])
+  offset = (k - 1) * n
+  result = @db.exec_params('SELECT * FROM students ORDER BY id LIMIT $1 OFFSET $2', [n, offset])
+  short_students = result.map { |row| StudentShort.from_student(build_student(row)) }
+  
+  short_students
+end
 
-    short_students = result.map { |row| StudentShort.from_student(build_student(row)) }
-	DataListStudentShort.new(short_students)
-  end
 
   def add_student(student)
     result = @db.exec_params(
@@ -54,10 +57,17 @@ class StudentsListDB
     result = @db.exec_query('SELECT COUNT(*) FROM students')
     result[0]['count'].to_i
   end
+  
+    def read
+    data = @connection.execute("SELECT * FROM students")
+    data.map do |row|
+      row = row.transform_keys { |key| key.to_sym }
+      Student.new(**row)
+    end
+  end
 
   private
 
-  # Преобразовать данные из базы в объект Student
   def build_student(data)
     Student.new(
       id: data['id'].to_i,

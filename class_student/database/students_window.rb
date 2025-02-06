@@ -1,151 +1,130 @@
-require 'fox16'
+require 'fox16' 
 require_relative 'Student_list_DB'
+require_relative 'Student_list_controller'
 include Fox
 
 class StudentsWindow < FXMainWindow
+  attr_accessor :current_page, :students_per_page, :controller  # Добавляем атрибуты для текущей страницы и числа студентов на странице
+
   def initialize(app)
     super(app, "Student Management", width: 920, height: 600)
+    @current_page = 1
+    @students_per_page = 20
+	@controller = StudentsListController.new(self)
+	
+    create_main_layout
+    create_filter_section
+    create_table_section
+    create_pagination_controls
+    create_control_buttons
 
-    @student_database = StudentsListDB.new()
-    @current_page_number = 1
-    @records_per_page = 20
+    show(PLACEMENT_SCREEN)
 
-    tab_book = FXTabBook.new(self, nil, 0, LAYOUT_FILL_X | LAYOUT_FILL_Y)
-    tab1 = FXTabItem.new(tab_book, "Student List View", nil)
-    tab1_frame = FXHorizontalFrame.new(tab_book, LAYOUT_FILL_X | LAYOUT_FILL_Y)
-
-    tab2 = FXTabItem.new(tab_book, "Tab 2")
-    FXVerticalFrame.new(tab_book, LAYOUT_FILL).tap do |frame|
-      FXLabel.new(frame, nil, nil, LAYOUT_CENTER_X)
-    end
-    tab3 = FXTabItem.new(tab_book, "Tab 3")
-    FXVerticalFrame.new(tab_book, LAYOUT_FILL).tap do |frame|
-      FXLabel.new(frame, nil, nil, LAYOUT_CENTER_X)
-    end
-
-    filter_frame = FXVerticalFrame.new(tab1_frame, FRAME_SUNKEN | LAYOUT_FILL_Y | LAYOUT_FIX_WIDTH, width: 170)
-    FXLabel.new(filter_frame, "Full Name:")
-    @full_name_input = FXTextField.new(filter_frame, 25, nil, 0, TEXTFIELD_NORMAL | LAYOUT_FILL_X)
-    create_filter_for_section(filter_frame, "GitHub:")
-    create_filter_for_section(filter_frame, "Email:")
-    create_filter_for_section(filter_frame, "Phone:")
-    create_filter_for_section(filter_frame, "Telegram:")
-
-    table_frame = FXVerticalFrame.new(tab1_frame, FRAME_SUNKEN | LAYOUT_FILL_X | LAYOUT_FILL_Y)
-    @students_table = FXTable.new(table_frame, nil, 0, TABLE_COL_SIZABLE | LAYOUT_FILL | TABLE_READONLY | TABLE_NO_COLSELECT)
-    
-    controls = FXHorizontalFrame.new(table_frame, opts: LAYOUT_CENTER_X)
-    prev_button = FXButton.new(controls, "Previous")
-    @page_indicator = FXLabel.new(controls, "Page: 1/1", nil, JUSTIFY_CENTER_X)
-    next_button = FXButton.new(controls, "Next")
-    prev_button.connect(SEL_COMMAND) { update_page(-1) }
-    next_button.connect(SEL_COMMAND) { update_page(1) }
-
-    control_frame = FXVerticalFrame.new(tab1_frame, FRAME_SUNKEN | LAYOUT_FILL_Y | LAYOUT_FIX_WIDTH, width: 100)
-    @add_button = FXButton.new(control_frame, "Add", nil, nil, 0, BUTTON_NORMAL | LAYOUT_FILL_X)
-    @edit_button = FXButton.new(control_frame, "Edit", nil, nil, 0, BUTTON_NORMAL | LAYOUT_FILL_X)
-    @delete_button = FXButton.new(control_frame, "Delete", nil, nil, 0, BUTTON_NORMAL | LAYOUT_FILL_X)
-    @update_button = FXButton.new(control_frame, "Update", nil, nil, 0, BUTTON_NORMAL | LAYOUT_FILL_X)
-
-    @students_table.connect(SEL_SELECTED) { update_button_states }
-    @students_table.connect(SEL_DESELECTED) { update_button_states }
-    update_button_states
-
-    self.connect(SEL_CLOSE) { app.exit }
-
-    load_data_from_db
+    @controller.refresh_data
   end
 
-  def create_filter_for_section(frame, label_text)
-    section_frame = FXVerticalFrame.new(frame, FRAME_SUNKEN | LAYOUT_FILL_X)
-    FXLabel.new(section_frame, label_text)
-    combo = FXComboBox.new(section_frame, 3, nil, 0, COMBOBOX_STATIC | LAYOUT_FILL_X)
-    combo.numVisible = 3
-    combo.appendItem("Yes")
-    combo.appendItem("No")
-    combo.appendItem("Doesn't matter")
-    combo.setCurrentItem(2)
+  def set_table_params(column_names, whole_entities_count)
+    @table.setTableSize(0, column_names.size)
+    column_names.each_with_index { |name, index| @table.setColumnText(index, name) }
 
-    input_field = FXTextField.new(section_frame, 25, nil, 0, TEXTFIELD_NORMAL | LAYOUT_FILL_X)
-    input_field.enabled = false
+    @total_pages = (whole_entities_count.to_f / @students_per_page).ceil
+    @page_label.text = "Страница #{@current_page} из #{@total_pages}"
+  end
 
-    combo.connect(SEL_COMMAND) do
-      if combo.currentItem == 0
-        input_field.enabled = true
-      else
-        input_field.enabled = false
-        input_field.text = ""
+  def set_table_data(data_table)
+    @table.setTableSize(data_table.size, data_table.first.size)
+    data_table.each_with_index do |row, i|
+      row.each_with_index do |value, j|
+        @table.setItemText(i, j, value.to_s)
       end
     end
-  end
-
-  def update_button_states
-    selected_rows = get_selected_rows
-    case selected_rows.size
-    when 0
-      @edit_button.enabled = false
-      @delete_button.enabled = false
-    when 1
-      @edit_button.enabled = true
-      @delete_button.enabled = true
-    else
-      @edit_button.enabled = false
-      @delete_button.enabled = true
-    end
-  end
-
-  def get_selected_rows
-    selected_rows = []
-    (0...@students_table.numRows).each do |row|
-      selected_rows << row if @students_table.rowSelected?(row)
-    end
-    selected_rows
-  end
-
-  def load_data_from_db
-    total_students = @student_database.get_student_count
-    total_pages = (total_students.to_f / @records_per_page).ceil
-    @page_indicator.text = "Page: #{@current_page_number}/#{total_pages}"
-
-    student_data = [
-      ["1", "John Doe", "Yes", "john.doe@example.com"],
-      ["2", "Jane Smith", "No", "jane.smith@example.com"]
-    ]
-
-    column_titles = ["ID", "Name", "GitHub", "Contact"]
-    @students_table.setTableSize(student_data.length, column_titles.length)
-
-    column_titles.each_with_index do |title, index|
-      @students_table.setColumnText(index, title)
-    end
-
-    student_data.each_with_index do |row, row_index|
-      row.each_with_index do |value, col_index|
-        @students_table.setItemText(row_index, col_index, value)
-      end
-    end
-
     adjust_column_widths
   end
 
+  def refresh_view
+    @controller.refresh_data if @controller
+  end
+
+  private
+
+  def create_main_layout
+    @sections = FXTabBook.new(self, opts: LAYOUT_FILL)
+    FXTabItem.new(@sections, "Список студентов")
+    @student_list_view = FXVerticalFrame.new(@sections, opts: LAYOUT_FILL)
+  end
+
+  def create_filter_section
+    filter_frame = FXGroupBox.new(@student_list_view, "Фильтрация", opts: GROUPBOX_NORMAL | LAYOUT_FILL_X)
+    FXLabel.new(filter_frame, "ФИО:")
+    @fio_field = FXTextField.new(filter_frame, 25)
+
+    @filters = {}
+
+    %w[Git Контакт].each do |field|
+      field_frame = FXHorizontalFrame.new(filter_frame, opts: LAYOUT_FILL_X)
+      FXLabel.new(field_frame, "#{field}:")
+
+      combo = FXComboBox.new(field_frame, 15, opts: COMBOBOX_STATIC | FRAME_SUNKEN | FRAME_THICK)
+      combo.numVisible = 3
+      combo.appendItem("Да")
+      combo.appendItem("Нет")
+      combo.appendItem("Неважно")
+      combo.setCurrentItem(2)
+
+      field_input = FXTextField.new(field_frame, 25, opts: TEXTFIELD_NORMAL | TEXTFIELD_READONLY)
+
+      combo.connect(SEL_COMMAND) do
+        field_input.enabled = combo.currentItem == 0
+        field_input.text = "" unless field_input.enabled
+      end
+
+      @filters["#{field}_combo"] = combo
+      @filters["#{field}_input"] = field_input
+    end
+  end
+
+  def create_table_section
+    table_frame = FXGroupBox.new(@student_list_view, "Список студентов", opts: GROUPBOX_NORMAL | LAYOUT_FILL)
+    @table = FXTable.new(table_frame, opts: LAYOUT_FILL)
+    @table.setTableSize(0, 4)
+    @table.editable = false
+  end
+
+  def create_pagination_controls
+    pagination_frame = FXHorizontalFrame.new(@student_list_view, opts: LAYOUT_FILL_X)
+    @page_label = FXLabel.new(pagination_frame, "Страница #{@current_page} из #{@total_pages}", opts: LAYOUT_CENTER_X)
+
+    @prev_button = FXButton.new(pagination_frame, "Назад", nil, nil, 0, opts: BUTTON_NORMAL)
+    @next_button = FXButton.new(pagination_frame, "Вперед", nil, nil, 0, opts: BUTTON_NORMAL)
+
+    @prev_button.connect(SEL_COMMAND) { change_page(-1) }
+    @next_button.connect(SEL_COMMAND) { change_page(1) }
+  end
+
+  def create_control_buttons
+    control_frame = FXHorizontalFrame.new(@student_list_view, opts: LAYOUT_FILL_X)
+
+    @add_button = FXButton.new(control_frame, "Добавить", opts: BUTTON_NORMAL)
+    @edit_button = FXButton.new(control_frame, "Изменить", opts: BUTTON_NORMAL)
+    @delete_button = FXButton.new(control_frame, "Удалить", opts: BUTTON_NORMAL)
+    @update_button = FXButton.new(control_frame, "Обновить", opts: BUTTON_NORMAL).connect(SEL_COMMAND) { refresh_view }
+  end
+
+  def change_page(page)
+    @controller.change_page(page)
+  end
+
   def adjust_column_widths
-    @students_table.setColumnWidth(0, 50)
-    @students_table.setColumnWidth(1, 150)
-    @students_table.setColumnWidth(2, 100)
-    @students_table.setColumnWidth(3, 180)
-  end
+    (0...@table.numColumns).each do |col|
+      max_width = 0
 
-  def update_page(direction)
-    total_students = @student_database.get_student_count
-    total_pages = (total_students.to_f / @records_per_page).ceil
-    new_page = @current_page_number + direction
-    return if new_page < 1 || new_page > total_pages
-    @current_page_number = new_page
-    load_data_from_db
-  end
+      (0...@table.numRows).each do |row|
+        cell_text = @table.getItemText(row, col)
+        text_width = cell_text.length * 8
+        max_width = [max_width, text_width].max
+      end
 
-  def create
-    super
-    show(PLACEMENT_SCREEN)
+      @table.setColumnWidth(col, max_width)
+    end
   end
 end

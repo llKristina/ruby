@@ -4,7 +4,7 @@ class DBConnection
   DB_PARAMS = {
     dbname: 'Students',
     user: 'postgres',
-    password: '123',
+    password: '1234',
     host: 'localhost',
     port: 5432
   }

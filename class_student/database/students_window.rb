@@ -1,10 +1,9 @@
 require 'fox16' 
-require_relative 'Student_list_DB'
 require_relative 'Student_list_controller'
 include Fox
 
 class StudentsWindow < FXMainWindow
-  attr_accessor :current_page, :students_per_page, :controller  # Добавляем атрибуты для текущей страницы и числа студентов на странице
+  attr_accessor :current_page, :students_per_page, :controller  
 
   def initialize(app)
     super(app, "Student Management", width: 920, height: 600)
@@ -45,7 +44,6 @@ class StudentsWindow < FXMainWindow
     @controller.refresh_data if @controller
   end
 
-  private
 
   def create_main_layout
     @sections = FXTabBook.new(self, opts: LAYOUT_FILL)
